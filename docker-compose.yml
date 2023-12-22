@@ -1,0 +1,36 @@
+services:
+  snipe-mysql:
+    image: mysql:5.6
+    volumes:
+      - snipesql-vol:/var/lib/mysql
+    command: --default-authentication-plugin=${MYSQL_NATIVE_PASSWORD}
+    expose:
+      - "3306"
+    env_file:
+      - stack.env
+    networks:
+      - default
+  snipe-it:
+    image: snipe/snipe-it
+    ports:
+      - "${SNIPE_IT_HTTP_PORT}:80"
+      - "${SNIPE_IT_HTTPS_PORT}:443"
+    volumes:
+      - snipeweb-conf:/etc/apache
+      - snipeweb-certs:/var/lib/snipeit/ssl
+    depends_on:
+      - snipe-mysql
+    env_file:
+      - stack.env
+    networks:
+      - web
+      - default
+networks:
+  web:
+    name: web
+    external: true
+    
+volumes:
+  snipesql-vol:
+  snipeweb-conf:
+  snipeweb-certs:
