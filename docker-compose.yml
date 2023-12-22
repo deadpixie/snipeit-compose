@@ -8,8 +8,6 @@ services:
       - "3306"
     env_file:
       - stack.env
-    networks:
-      - default
   snipe-it:
     image: snipe/snipe-it
     ports:
@@ -22,14 +20,6 @@ services:
       - snipe-mysql
     env_file:
       - stack.env
-    networks:
-      - web
-      - default
-networks:
-  web:
-    name: web
-    external: true
-    
 volumes:
   snipesql-vol:
   snipeweb-conf:
